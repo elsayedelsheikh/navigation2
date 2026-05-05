@@ -113,6 +113,8 @@ void SmacPlannerLatticeT<NodeT>::configure(
     node->declare_or_get_parameter(name + ".use_quadratic_cost_penalty", false);
   _search_info.downsample_obstacle_heuristic =
     node->declare_or_get_parameter(name + ".downsample_obstacle_heuristic", true);
+  _search_info.prefer_forward_expansions =
+    node->declare_or_get_parameter(name + ".prefer_forward_expansions", false);
 
   _max_planning_time = node->declare_or_get_parameter(name + ".max_planning_time", 5.0);
   _lookup_table_size = node->declare_or_get_parameter(name + ".lookup_table_size", 20.0);
@@ -682,6 +684,9 @@ SmacPlannerLatticeT<NodeT>::updateParametersCallback(
         }
       } else if (param_name == _name + ".analytic_expansion_max_cost_override") {
         _search_info.analytic_expansion_max_cost_override = parameter.as_bool();
+        reinit_a_star = true;
+      } else if (param_name == _name + ".prefer_forward_expansions") {
+        _search_info.prefer_forward_expansions = parameter.as_bool();
         reinit_a_star = true;
       }
     } else if (param_type == ParameterType::PARAMETER_INTEGER) {
